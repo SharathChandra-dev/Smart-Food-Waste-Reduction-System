@@ -1,0 +1,169 @@
+.food-page,
+.form-page{
+    padding:50px 40px;
+}
+
+.page-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:35px;
+    gap:20px;
+}
+
+.page-header h1{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.page-header p{
+    color:#7b6454;
+}
+
+.search-bar{
+    margin-bottom:30px;
+}
+
+.search-bar input{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:18px;
+    background:white;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    outline:none;
+}
+
+.food-table{
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th{
+    background:#f3ebe5;
+    padding:18px;
+    text-align:left;
+}
+
+table td{
+    padding:18px;
+    border-bottom:1px solid #eee;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+}
+
+.edit-btn{
+    background:#fff1df;
+    color:#b06f3d;
+    padding:10px 14px;
+    border-radius:10px;
+}
+
+.delete-btn{
+    background:#ffe3e3;
+    color:#d33;
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.badge-warning{
+    background:#fff2df;
+    color:#c57a1d;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:13px;
+}
+
+.badge-success{
+    background:#e5f7ec;
+    color:#248f5a;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:13px;
+}
+
+.form-card{
+    background:white;
+    border-radius:28px;
+    padding:40px;
+    max-width:1000px;
+    margin:auto;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.form-top{
+    margin-bottom:35px;
+}
+
+.form-top h1{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.form-top p{
+    color:#7b6454;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
+    margin-bottom:30px;
+}
+
+.input-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.input-group label{
+    margin-bottom:10px;
+    font-weight:500;
+}
+
+.input-group input,
+.input-group select{
+    padding:16px;
+    border:none;
+    border-radius:16px;
+    background:#f9f6f3;
+    outline:none;
+}
+
+.checkbox-group{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:30px;
+}
+
+@media(max-width:768px){
+
+    .food-page,
+    .form-page{
+        padding:30px 20px;
+    }
+
+    .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .page-header h1,
+    .form-top h1{
+        font-size:32px;
+    }
+}

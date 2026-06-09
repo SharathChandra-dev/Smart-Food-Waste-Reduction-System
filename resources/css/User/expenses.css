@@ -1,0 +1,196 @@
+.expenses-page,
+.expense-form-page{
+    padding:50px 40px;
+}
+
+.page-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:35px;
+    gap:20px;
+}
+
+.page-header h1{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.page-header p{
+    color:#7b6454;
+}
+
+.expense-cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:25px;
+    margin-bottom:35px;
+}
+
+.expense-card{
+    background:white;
+    border-radius:24px;
+    padding:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.expense-card i{
+    font-size:30px;
+    color:#b06f3d;
+    margin-bottom:20px;
+}
+
+.expense-card h2{
+    font-size:34px;
+    margin-bottom:10px;
+}
+
+.filter-section{
+    display:flex;
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.filter-section input,
+.filter-section select{
+    flex:1;
+    padding:16px;
+    border:none;
+    border-radius:16px;
+    background:white;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+    outline:none;
+}
+
+.expense-table{
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th{
+    background:#f3ebe5;
+    padding:18px;
+    text-align:left;
+}
+
+table td{
+    padding:18px;
+    border-bottom:1px solid #eee;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+}
+
+.edit-btn{
+    background:#fff1df;
+    color:#b06f3d;
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.delete-btn{
+    background:#ffe3e3;
+    color:#d33;
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.paid-badge{
+    background:#e5f7ec;
+    color:#248f5a;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:13px;
+}
+
+.expense-form-card{
+    background:white;
+    border-radius:28px;
+    padding:40px;
+    max-width:1000px;
+    margin:auto;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.form-top{
+    margin-bottom:35px;
+}
+
+.form-top h1{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.form-top p{
+    color:#7b6454;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
+    margin-bottom:30px;
+}
+
+.input-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.input-group label{
+    margin-bottom:10px;
+    font-weight:500;
+}
+
+.input-group input,
+.input-group select{
+    padding:16px;
+    border:none;
+    border-radius:16px;
+    background:#f9f6f3;
+    outline:none;
+}
+
+.actions form{
+    margin:0;
+}
+
+@media(max-width:768px){
+
+    .expenses-page,
+    .expense-form-page{
+        padding:30px 20px;
+    }
+
+    .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .expense-cards{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .filter-section{
+        flex-direction:column;
+    }
+
+    .page-header h1,
+    .form-top h1{
+        font-size:32px;
+    }
+}
