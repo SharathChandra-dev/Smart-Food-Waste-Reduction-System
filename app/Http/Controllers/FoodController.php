@@ -95,15 +95,24 @@ class FoodController extends Controller
             ->with('success', 'Food Deleted');
     }
 
-    public function userIndex()
-    {
-        $foods = FoodItemSfwr::whereDate('expiry_date_sfwr', '>=', now()->toDateString())
-            ->orderBy('id_food_sfwr', 'desc')
-            ->get();
+public function userIndex()
+{
+    $foods = FoodItemSfwr::whereDate(
+            'expiry_date_sfwr',
+            '>=',
+            now()->toDateString()
+        )
+        ->orderBy('id_food_sfwr', 'desc')
+        ->get();
 
-        return view(
-            'User.foods.index',
-            compact('foods')
-        );
-    }
+    $categories = FoodItemSfwr::select('foodcategory_sfwr')
+        ->distinct()
+        ->whereNotNull('foodcategory_sfwr')
+        ->pluck('foodcategory_sfwr');
+
+    return view(
+        'User.foods.index',
+        compact('foods', 'categories')
+    );
+}
 }
