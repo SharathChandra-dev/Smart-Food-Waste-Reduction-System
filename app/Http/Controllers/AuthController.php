@@ -13,32 +13,44 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $request->validate([
-            'password' => 'required|string',
-            'username' => 'required|string',
-        ]);
+ $request->validate([
+'password' => 'required|string',
+'username' => 'required|string',
+]);
 
-        $credentials = [
-            'username_sfwr' => $request->username,
-            'password'   => $request->password,
-        ];
+$user = User::where('username_sfwr', $request->username)->first();
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+if (!$user) {
+    return back()->withErrors([
+        'username' => 'User not found.'
+    ])->withInput();
+}
 
-            $user = Auth::user();
-            $twoFactor = UserTwoFactor::where('user_id_sfwr', $user->id_user_sfwr)->first();
+if ($user->role_sfwr !== 'User') {
+    return back()->withErrors([
+        'username' => 'This account belongs to an Admin. Please use Admin Login.'
+    ])->withInput();
+}
 
-            if ($twoFactor && $twoFactor->enabled_sfwr) {
-                Auth::logout();
-                session(['2fa_user_id' => $user->id_user_sfwr]);
-                return redirect()->route('2fa.verify');
-            }
+if (!Hash::check($request->password, $user->password_sfwr)) {
+    return back()->withErrors([
+        'password' => 'Invalid password.'
+    ])->withInput();
+}
 
-            return redirect()->route('2fa.setup');
-        }
+Auth::login($user);
 
-        return back()->withErrors(['username' => 'Invalid credentials'])->withInput();
+$request->session()->regenerate();
+
+$twoFactor = UserTwoFactor::where('user_id_sfwr', $user->id_user_sfwr)->first();
+
+if ($twoFactor && $twoFactor->enabled_sfwr) {
+    Auth::logout();
+    session(['2fa_user_id' => $user->id_user_sfwr]);
+    return redirect()->route('2fa.verify');
+}
+
+return redirect()->route('2fa.setup');
     }
 
     public function show2faSetup()
@@ -148,4 +160,46 @@ class AuthController extends Controller
 
         return redirect()->route('login')->with('success', 'Registration successful. Please login.');
     }
+
+public function adminLogin(Request $request)
+{
+    $request->validate([
+'username' => 'required|string',
+'password' => 'required|string',
+]);
+
+$user = User::where('username_sfwr', $request->username)->first();
+
+if (!$user) {
+    return back()->withErrors([
+        'username' => 'Admin account not found.'
+    ])->withInput();
+}
+
+if ($user->role_sfwr !== 'Admin') {
+    return back()->withErrors([
+        'username' => 'This account belongs to a User. Please use User Login.'
+    ])->withInput();
+}
+
+if (!Hash::check($request->password, $user->password_sfwr)) {
+    return back()->withErrors([
+        'password' => 'Invalid password.'
+    ])->withInput();
+}
+
+Auth::login($user);
+
+$request->session()->regenerate();
+
+$twoFactor = UserTwoFactor::where('user_id_sfwr', $user->id_user_sfwr)->first();
+
+if ($twoFactor && $twoFactor->enabled_sfwr) {
+    Auth::logout();
+    session(['2fa_user_id' => $user->id_user_sfwr]);
+    return redirect()->route('2fa.verify');
+}
+
+return redirect()->route('2fa.setup');
+}
 }

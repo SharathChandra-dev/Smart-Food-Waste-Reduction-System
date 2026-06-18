@@ -22,6 +22,11 @@ class AdminController extends Controller
         return view('User.register');
     }
 
+public function adminLogin()
+{
+    return view('Admin.auth.login');
+}
+
     public function dashboard()
     {
         $totalUsers = User::count();
@@ -177,43 +182,3 @@ class AdminController extends Controller
 
 }
 
-// namespace App\Http\Controllers;
-
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\DB;
-
-// class AdminController extends Controller
-// {
-//     public function login(Request $request)
-//     {
-//         $request->validate([
-//             'admin_id' => 'required',
-//             'password' => 'required',
-//         ]);
-
-//         if ($request->admin_id === 'admin' && $request->password === 'admin123') {
-//             $request->session()->put('is_admin', true);
-//             $request->session()->save();
-//             return redirect()->route('admin.dashboard');
-//         }
-
-//         return back()->withErrors(['admin_id' => 'Invalid admin credentials.']);
-//     }
-
-//     public function dashboard(Request $request)
-//     {
-//         if (!$request->session()->get('is_admin')) {
-//             return redirect()->route('admin.login');
-//         }
-
-//         $users = DB::table('users_sfwr')->get();
-
-//         return view('admin.admin_dashboard', compact('users'));
-//     }
-
-//     public function logout(Request $request)
-//     {
-//         $request->session()->forget('is_admin');
-//         return redirect()->route('admin.login');
-//     }
-// }
