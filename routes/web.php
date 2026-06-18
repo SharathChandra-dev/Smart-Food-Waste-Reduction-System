@@ -7,23 +7,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\FoodIntakeController;
 use App\Http\Middleware\RoleMiddleware;
-/*
-|--------------------------------------------------------------------------
-| HOME
-|--------------------------------------------------------------------------
-*/
-
-// Route::get('/', function () {
-
-//     return view('User.home');
-
-// })->name('home');
-
-/*
-|--------------------------------------------------------------------------
-| HOME
-|--------------------------------------------------------------------------
-*/
 
 Route::get('/', function () {
 
@@ -36,6 +19,13 @@ Route::get('/', function () {
 | AUTH
 |--------------------------------------------------------------------------
 */
+Route::get('/admin/login', [AdminController::class, 'adminLogin'])
+    ->name('admin.login');
+
+Route::post('/admin/login-submit', [AuthController::class, 'adminLogin'])
+    ->name('admin.login.submit');
+
+Route::redirect('/admin', '/admin/login');
 
 Route::get('/login', [AdminController::class, 'login'])
     ->name('login');
@@ -43,8 +33,10 @@ Route::get('/login', [AdminController::class, 'login'])
 Route::get('/register', [AdminController::class, 'register'])
     ->name('register');
 
-Route::get('/admin', [AdminController::class, 'login'])
-    ->name('admin.login');
+// Route::get('/admin', [AdminController::class, 'login'])
+//     ->name('admin.login');
+
+// Route::redirect('/admin', '/admin/login');
 
 Route::get('/admin/register', [AdminController::class, 'register'])
     ->name('admin.register');
@@ -194,3 +186,4 @@ Route::middleware(['auth', RoleMiddleware::class . ':Admin'])->group(function ()
     Route::get('/admin/food-intake', [FoodIntakeController::class, 'index'])
         ->name('admin.intake.index');
 });
+
