@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SFWR Admin Panel</title>
+    <title>SFWR</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -118,6 +118,11 @@
 
                 <form method="POST" action="{{ route('login.submit') }}">
                     @csrf
+                    @if ($errors->any())
+                        <div style="background:#ffe6e6;color:#d60000;padding:10px;border-radius:8px;margin-bottom:15px;">
+                            {{ $errors->first() }}
+                        </div>
+                    @endif
 
                     <div class="input-group">
 
@@ -174,7 +179,11 @@
                         <i class="fa-solid fa-right-to-bracket"></i>
                         Secure Login
                     </button>
-
+                    <div style="text-align:center;margin-top:15px;">
+                        <a href="{{ route('admin.login') }}">
+                            Admin Login
+                        </a>
+                    </div>
                 </form>
 
                 <!-- SECURITY INFO -->
