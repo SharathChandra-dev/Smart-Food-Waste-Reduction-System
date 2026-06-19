@@ -40,10 +40,10 @@
   - [Installation](#installation)
 - [Usage](#-usage)
 - [Project Structure](#-project-structure)
-- [Screenshots](#-screenshots)
+<!-- - [Screenshots](#-screenshots) -->
 - [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
-- [License](#-license)
+<!-- - [License](#-license) -->
 - [Contact](#-contact)
 
 ---
@@ -202,7 +202,7 @@ smart-food-waste-reduction/
 └── public/                     # Publicly accessible assets
 ```
 
----
+<!-- ---
 
 ## 📸 Screenshots
 
@@ -213,7 +213,7 @@ smart-food-waste-reduction/
 | 🏠 Homepage | `screenshots/homepage.png` |
 | 🛠️ Admin Panel | `screenshots/admin-panel.png` |
 | 🔐 Login Page | `screenshots/login.png` |
-| 📬 Contact Form | `screenshots/contact.png` |
+| 📬 Contact Form | `screenshots/contact.png` | -->
 
 ---
 
@@ -240,20 +240,20 @@ Contributions are welcome! If you'd like to improve this project:
 4. Push to the branch: `git push origin feature/your-feature`
 5. Open a Pull Request
 
----
+<!-- ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details. -->
 
 ---
 
 ## 📬 Contact
 
-**Sharath** — Computer Science Student @ SRH University Munich
+**Sharath Chandra** — Computer Science Student @ SRH University Munich
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/your-profile)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/your-username)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/sharath-c1)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sharathchandra-dev)
 
 ---
 
