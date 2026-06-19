@@ -109,7 +109,7 @@ Make sure you have the following installed:
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/your-username/smart-food-waste-reduction.git
+git clone https://github.com/sharathchandra-dev/smart-food-waste-reduction.git
 cd smart-food-waste-reduction
 ```
 
