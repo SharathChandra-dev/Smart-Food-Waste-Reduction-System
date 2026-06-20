@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -12,7 +13,6 @@ class FoodItemSfwr extends Model
     protected $primaryKey = 'id_food_sfwr';
 
     protected $fillable = [
-
         'foodname_sfwr',
         'foodcategory_sfwr',
         'manufacturing_date_sfwr',
@@ -26,7 +26,6 @@ class FoodItemSfwr extends Model
         'foodimage_sfwr',
         'id_user_sfwr',
         'id_intake_sfwr'
-
     ];
 
     protected $dates = [
@@ -37,18 +36,11 @@ class FoodItemSfwr extends Model
         'updated_at',
     ];
 
-    /**
-     * Boot the model to attach event listeners
-     */
     protected static function boot()
     {
         parent::boot();
 
-        /**
-         * Automatically create an intake record when a new food item is created
-         */
         static::created(function ($model) {
-            // Only create intake if one doesn't already exist
             if (is_null($model->id_intake_sfwr)) {
                 $intake = FoodIntakeSfwr::create([
                     'foodintake_sfwr' => $model->foodname_sfwr,
@@ -57,14 +49,10 @@ class FoodItemSfwr extends Model
                     'notes_sfwr' => "Automatically created for {$model->foodname_sfwr} - Expires on {$model->expiry_date_sfwr}",
                 ]);
 
-                // Update the food item with the intake record ID
                 $model->update(['id_intake_sfwr' => $intake->id_intake_sfwr]);
             }
         });
 
-        /**
-         * Update intake record when food item is updated
-         */
         static::updated(function ($model) {
             if (!is_null($model->id_intake_sfwr)) {
                 $intake = FoodIntakeSfwr::find($model->id_intake_sfwr);
@@ -77,9 +65,6 @@ class FoodItemSfwr extends Model
             }
         });
 
-        /**
-         * Optionally delete intake record when food item is deleted
-         */
         static::deleted(function ($model) {
             if (!is_null($model->id_intake_sfwr)) {
                 FoodIntakeSfwr::where('id_intake_sfwr', $model->id_intake_sfwr)->delete();
@@ -87,43 +72,46 @@ class FoodItemSfwr extends Model
         });
     }
 
-    /**
-     * Get the user who added this food item
-     */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(UserSfwr::class, 'id_user_sfwr', 'id');
+        return $this->belongsTo(User::class, 'id_user_sfwr', 'id_user_sfwr');
     }
 
-    /**
-     * Get the food intake record associated with this food item
-     */
     public function foodIntake(): BelongsTo
     {
         return $this->belongsTo(FoodIntakeSfwr::class, 'id_intake_sfwr', 'id_intake_sfwr');
     }
 
-    /**
-     * Scope to get foods expiring within days
-     */
+    public function claims()
+    {
+        return $this->hasMany(FoodClaimSfwr::class, 'id_food_sfwr', 'id_food_sfwr');
+    }
+
     public function scopeExpiringWithin($query, $days = 7)
     {
         return $query->where('expiry_date_sfwr', '<=', now()->addDays($days))->where('expiry_date_sfwr', '>=', now());
     }
 
-    /**
-     * Scope to get foods that have expired
-     */
     public function scopeExpired($query)
     {
         return $query->where('expiry_date_sfwr', '<', now());
     }
 
-    /**
-     * Scope to get foods available for consumption
-     */
     public function scopeAvailable($query)
     {
         return $query->where('expiry_date_sfwr', '>=', now());
+    }
+
+    public function getExpiryStatusAttribute()
+    {
+        $today = now()->startOfDay();
+        $expiry = \Carbon\Carbon::parse($this->expiry_date_sfwr)->startOfDay();
+
+        if ($expiry->lt($today)) {
+            return 'expired';
+        } elseif ($expiry->lte($today->copy()->addDays(3))) {
+            return 'expiring_soon';
+        }
+        return 'fresh';
     }
 }
