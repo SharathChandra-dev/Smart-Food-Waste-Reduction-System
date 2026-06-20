@@ -13,7 +13,7 @@
             <h1>Pending Food Requests</h1>
 
             <p>
-                Review and verify food submissions before publishing.
+                Review and approve user requests for available food items.
             </p>
 
         </div>
@@ -22,7 +22,7 @@
 
             <i class="fa-solid fa-clock"></i>
 
-            12 Pending
+            {{ $claims->count() }} Pending
 
         </div>
 
@@ -32,14 +32,14 @@
 
     <div class="pending-grid">
 
-        <!-- CARD 1 -->
+        @forelse($claims as $claim)
 
-        <div class="pending-card">
+        <div class="pending-card" id="claim-{{ $claim->id_claim_sfwr }}">
 
             <div class="food-image">
 
                 <img
-                src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38">
+                src="{{ $claim->foodItem && $claim->foodItem->foodimage_sfwr ? asset('storage/' . $claim->foodItem->foodimage_sfwr) : 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38' }}">
 
                 <div class="pending-badge">
                     Pending Approval
@@ -49,10 +49,10 @@
 
             <div class="pending-body">
 
-                <h2>Veg Pizza Combo</h2>
+                <h2>{{ $claim->foodItem->foodname_sfwr ?? 'Item Unavailable' }}</h2>
 
                 <p class="food-desc">
-                    Fresh pizza available from restaurant surplus.
+                    {{ $claim->foodItem->fooddescription_sfwr ?? 'No description provided.' }}
                 </p>
 
                 <!-- USER -->
@@ -64,9 +64,9 @@
 
                     <div>
 
-                        <h4>Sharath</h4>
+                        <h4>{{ $claim->user->username_sfwr ?? 'Unknown User' }}</h4>
 
-                        <span>Food Contributor</span>
+                        <span>Requesting User</span>
 
                     </div>
 
@@ -78,17 +78,17 @@
 
                     <div>
                         <i class="fa-solid fa-location-dot"></i>
-                        Munich, Germany
+                        {{ $claim->foodItem->pickup_location_sfwr ?? 'N/A' }}
                     </div>
 
                     <div>
                         <i class="fa-solid fa-phone"></i>
-                        +49 123456789
+                        {{ $claim->foodItem->contact_sfwr ?? 'N/A' }}
                     </div>
 
                     <div>
                         <i class="fa-solid fa-calendar"></i>
-                        Expiry: Tomorrow
+                        Expiry: {{ $claim->foodItem ? \Carbon\Carbon::parse($claim->foodItem->expiry_date_sfwr)->format('M d, Y') : 'N/A' }}
                     </div>
 
                 </div>
@@ -97,112 +97,35 @@
 
                 <div class="action-buttons">
 
-                    <button
-                    class="approve-btn">
+                    <form action="{{ route('admin.claims.approve', $claim->id_claim_sfwr) }}" method="POST" class="claim-form">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="approve-btn" data-action="approve">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Approve
+                        </button>
+                    </form>
 
-                        <i class="fa-solid fa-circle-check"></i>
-
-                        Approve
-
-                    </button>
-
-                    <button
-                    class="reject-btn">
-
-                        <i class="fa-solid fa-circle-xmark"></i>
-
-                        Reject
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- CARD 2 -->
-
-        <div class="pending-card">
-
-            <div class="food-image">
-
-                <img
-                src="https://images.unsplash.com/photo-1504674900247-0877df9cc836">
-
-                <div class="pending-badge">
-                    Pending Approval
-                </div>
-
-            </div>
-
-            <div class="pending-body">
-
-                <h2>Rice Meal Pack</h2>
-
-                <p class="food-desc">
-                    Extra food available for nearby students.
-                </p>
-
-                <div class="user-info">
-
-                    <img
-                    src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
-
-                    <div>
-
-                        <h4>Adithya</h4>
-
-                        <span>Food Contributor</span>
-
-                    </div>
-
-                </div>
-
-                <div class="food-details">
-
-                    <div>
-                        <i class="fa-solid fa-location-dot"></i>
-                        Berlin, Germany
-                    </div>
-
-                    <div>
-                        <i class="fa-solid fa-phone"></i>
-                        +49 987654321
-                    </div>
-
-                    <div>
-                        <i class="fa-solid fa-calendar"></i>
-                        Expiry: Today
-                    </div>
-
-                </div>
-
-                <div class="action-buttons">
-
-                    <button
-                    class="approve-btn">
-
-                        <i class="fa-solid fa-circle-check"></i>
-
-                        Approve
-
-                    </button>
-
-                    <button
-                    class="reject-btn">
-
-                        <i class="fa-solid fa-circle-xmark"></i>
-
-                        Reject
-
-                    </button>
+                    <form action="{{ route('admin.claims.reject', $claim->id_claim_sfwr) }}" method="POST" class="claim-form">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="reject-btn" data-action="reject">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            Reject
+                        </button>
+                    </form>
 
                 </div>
 
             </div>
 
         </div>
+
+        @empty
+
+        <p>No pending food requests right now.</p>
+
+        @endforelse
 
     </div>
 
@@ -227,12 +150,6 @@ id="statusPopup">
 
 <script>
 
-const approveBtns =
-document.querySelectorAll('.approve-btn');
-
-const rejectBtns =
-document.querySelectorAll('.reject-btn');
-
 const popup =
 document.getElementById('statusPopup');
 
@@ -242,45 +159,61 @@ document.getElementById('popupTitle');
 const popupText =
 document.getElementById('popupText');
 
-approveBtns.forEach(btn => {
+function showPopup(action) {
 
-    btn.addEventListener('click', () => {
+    if (action === 'approve') {
+        popupTitle.innerText = 'Food Approved';
+        popupText.innerText = 'This request has been approved.';
+    } else {
+        popupTitle.innerText = 'Food Rejected';
+        popupText.innerText = 'The food request has been rejected.';
+    }
 
-        popupTitle.innerText =
-        'Food Approved';
+    popup.classList.add('active');
 
-        popupText.innerText =
-        'This post is now visible to users.';
+    setTimeout(() => {
+        popup.classList.remove('active');
+    }, 3000);
 
-        popup.classList.add('active');
+}
 
-        setTimeout(() => {
+document.querySelectorAll('.claim-form').forEach(form => {
 
-            popup.classList.remove('active');
+    form.addEventListener('submit', function (e) {
 
-        },3000);
+        e.preventDefault();
 
-    });
+        const button = this.querySelector('button[type="submit"]');
+        const action = button.dataset.action;
+        const card = this.closest('.pending-card');
 
-});
+        fetch(this.action, {
+            method: 'POST',
+            body: new FormData(this),
+        })
+        .then(response => {
 
-rejectBtns.forEach(btn => {
+            if (response.ok) {
 
-    btn.addEventListener('click', () => {
+                showPopup(action);
 
-        popupTitle.innerText =
-        'Food Rejected';
+                card.style.transition = 'opacity 0.4s ease';
+                card.style.opacity = '0';
 
-        popupText.innerText =
-        'The food post has been rejected.';
+                setTimeout(() => card.remove(), 400);
 
-        popup.classList.add('active');
+            } else {
 
-        setTimeout(() => {
+                alert('Something went wrong. Please try again.');
 
-            popup.classList.remove('active');
+            }
 
-        },3000);
+        })
+        .catch(() => {
+
+            alert('Network error. Please try again.');
+
+        });
 
     });
 
