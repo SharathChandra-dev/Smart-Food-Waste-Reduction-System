@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FoodIntakeSfwr extends Model
 {
-    protected $table = 'FoodIntake_sfwr';
+    protected $table = 'foodintake_sfwr';
 
     protected $primaryKey = 'id_intake_sfwr';
 
@@ -25,25 +26,16 @@ class FoodIntakeSfwr extends Model
         'updated_at',
     ];
 
-    /**
-     * Get the user associated with this intake record
-     */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(UserSfwr::class, 'id_user_sfwr', 'id');
+        return $this->belongsTo(User::class, 'id_user_sfwr', 'id_user_sfwr');
     }
 
-    /**
-     * Get all food items linked to this intake record
-     */
     public function foodItems(): HasMany
     {
         return $this->hasMany(FoodItemSfwr::class, 'id_intake_sfwr', 'id_intake_sfwr');
     }
 
-    /**
-     * Scope to get foods expiring soon (within 7 days)
-     */
     public function scopeExpiringFoods($query)
     {
         return $query->with(['foodItems' => function ($q) {
