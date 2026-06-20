@@ -6,12 +6,11 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\FoodIntakeController;
+use App\Http\Controllers\FoodClaimController;
 use App\Http\Middleware\RoleMiddleware;
 
 Route::get('/', function () {
-
     return view('User.home');
-
 })->name('home');
 
 /*
@@ -19,7 +18,6 @@ Route::get('/', function () {
 | AUTH
 |--------------------------------------------------------------------------
 */
-
 Route::get('/admin/login', [AdminController::class, 'adminLogin'])
     ->name('admin.login');
 
@@ -87,7 +85,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/food', [FoodController::class, 'adminIndex'])
             ->name('admin.food');
 
-        Route::get('/admin/pending-food', [AdminController::class, 'pendingFood'])
+        Route::get('/admin/pending-food', [FoodClaimController::class, 'adminIndex'])
             ->name('admin.pending.food');
 
         Route::post('/admin/food/store', [FoodController::class, 'store'])
@@ -98,6 +96,12 @@ Route::middleware('auth')->group(function () {
 
         Route::delete('/admin/food/delete/{id}', [FoodController::class, 'destroy'])
             ->name('admin.food.destroy');
+
+        Route::put('/admin/claims/approve/{id}', [FoodClaimController::class, 'approve'])
+            ->name('admin.claims.approve');
+
+        Route::put('/admin/claims/reject/{id}', [FoodClaimController::class, 'reject'])
+            ->name('admin.claims.reject');
     });
 
     Route::post('/admin/logout', [AdminController::class, 'logout'])
@@ -123,6 +127,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/foods/create', function () {
         return view('User.foods.create');
     })->name('foods.create');
+
+    Route::post('/foods/claim/{id}', [FoodClaimController::class, 'store'])
+        ->name('foods.claim');
+
+    Route::get('/my-claims', [FoodClaimController::class, 'myClaims'])
+        ->name('claims.mine');
 });
 
 Route::get('/my-foods', function () {
@@ -152,7 +162,7 @@ Route::put('/admin/headers/update/{id}', [AdminController::class, 'updateHeader'
 
 Route::delete('/admin/headers/delete/{id}', [AdminController::class, 'deleteHeader'])
     ->name('admin.headers.delete');
-    
+
 /*
 |--------------------------------------------------------------------------
 | FOOD INTAKE ROUTES
