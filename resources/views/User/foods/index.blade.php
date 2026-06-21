@@ -31,6 +31,14 @@
 
 </section>
 
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-error">{{ session('error') }}</div>
+@endif
+
 <section class="filter-section">
 
     <div class="search-box">
@@ -74,6 +82,17 @@
 
         @foreach($foods as $food)
 
+        @php
+            $badgeMap = [
+                'fresh' => ['food-badge--fresh', '🟢 Fresh'],
+                'expiring_soon' => ['food-badge--warning', '🟡 Expiring Soon'],
+                'expired' => ['food-badge--expired', '🔴 Expired'],
+            ];
+            [$badgeClass, $badgeLabel] = $badgeMap[$food->expiry_status];
+
+            $claimStatus = $myClaims[$food->id_food_sfwr] ?? null;
+        @endphp
+
         <div
             class="food-card"
             data-name="{{ strtolower($food->foodname_sfwr) }}"
@@ -89,8 +108,8 @@
                     <span>No Image</span>
                 @endif
 
-                <span class="food-badge">
-                    Available
+                <span class="food-badge {{ $badgeClass }}">
+                    {{ $badgeLabel }}
                 </span>
 
             </div>
@@ -146,6 +165,27 @@
                         Contact:
                         {{ $food->contact_sfwr }}
                     </span>
+
+                </div>
+
+                <div class="food-action">
+
+                    @if($claimStatus === 'pending')
+                        <button class="btn-claim btn-claim--pending" disabled>
+                            <i class="fa-solid fa-clock"></i> Request Pending
+                        </button>
+                    @elseif($claimStatus === 'approved')
+                        <button class="btn-claim btn-claim--approved" disabled>
+                            <i class="fa-solid fa-check"></i> Approved
+                        </button>
+                    @else
+                        <form action="{{ route('foods.claim', $food->id_food_sfwr) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn-claim btn-claim--request">
+                                <i class="fa-solid fa-hand-holding-heart"></i> Request This Item
+                            </button>
+                        </form>
+                    @endif
 
                 </div>
 
