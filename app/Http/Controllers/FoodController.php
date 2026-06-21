@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FoodItemSfwr;
+use App\Models\FoodClaimSfwr;
 use Illuminate\Http\Request;
 
 class FoodController extends Controller
@@ -97,6 +98,10 @@ class FoodController extends Controller
             ->whereNotNull('foodcategory_sfwr')
             ->pluck('foodcategory_sfwr');
 
-        return view('User.foods.index', compact('foods', 'categories'));
+        $myClaims = FoodClaimSfwr::where('id_user_sfwr', auth()->id())
+            ->whereIn('id_food_sfwr', $foods->pluck('id_food_sfwr'))
+            ->pluck('status_sfwr', 'id_food_sfwr');
+
+        return view('User.foods.index', compact('foods', 'categories', 'myClaims'));
     }
 }
