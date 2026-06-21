@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HeaderSfwr;
 use App\Models\FoodItemSfwr;
+use App\Models\FoodClaimSfwr;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,10 +23,10 @@ class AdminController extends Controller
         return view('User.register');
     }
 
-public function adminLogin()
-{
-    return view('Admin.auth.login');
-}
+    public function adminLogin()
+    {
+        return view('Admin.auth.login');
+    }
 
     public function dashboard()
     {
@@ -43,7 +44,20 @@ public function adminLogin()
 
         $totalExpiringSoon = $expiringFoods->count();
 
-        return view('admin.admin_dashboard', compact('totalUsers', 'totalFoods', 'totalHeaders', 'totalExpiringSoon', 'expiringFoods'));
+        $pendingClaims = FoodClaimSfwr::where('status_sfwr', 'pending')->count();
+        $approvedClaims = FoodClaimSfwr::where('status_sfwr', 'approved')->count();
+        $rejectedClaims = FoodClaimSfwr::where('status_sfwr', 'rejected')->count();
+
+        return view('admin.admin_dashboard', compact(
+            'totalUsers',
+            'totalFoods',
+            'totalHeaders',
+            'totalExpiringSoon',
+            'expiringFoods',
+            'pendingClaims',
+            'approvedClaims',
+            'rejectedClaims'
+        ));
     }
 
     public function users()
@@ -132,7 +146,7 @@ public function adminLogin()
         return redirect()->route('admin.login');
     }
 
-     /* -----------------------------
+    /* -----------------------------
         HEADER CRUD (NEW FEATURE)
     ------------------------------*/
 
@@ -179,6 +193,4 @@ public function adminLogin()
 
         return back()->with('success', 'Header deleted successfully.');
     }
-
 }
-
