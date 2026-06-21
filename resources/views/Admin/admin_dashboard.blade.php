@@ -56,6 +56,25 @@
         <p>Manage your system efficiently with our comprehensive admin dashboard. Navigate through the sidebar to manage users and food items.</p>
     </div>
 
+    <div class="chart-section">
+        <div class="section-header">
+            <h2>Analytics Overview</h2>
+            <p>Live breakdown of claims and system activity.</p>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-card">
+                <h3>Claims Breakdown</h3>
+                <canvas id="claimsChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>System Overview</h3>
+                <canvas id="overviewChart"></canvas>
+            </div>
+        </div>
+    </div>
+
     <div class="expiring-section">
         <div class="section-header">
             <h2>Expiring Soon</h2>
@@ -83,5 +102,50 @@
         @endif
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+const claimsCtx = document.getElementById('claimsChart').getContext('2d');
+new Chart(claimsCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Pending', 'Approved', 'Rejected'],
+        datasets: [{
+            data: [{{ $pendingClaims ?? 0 }}, {{ $approvedClaims ?? 0 }}, {{ $rejectedClaims ?? 0 }}],
+            backgroundColor: ['#f59e0b', '#16a34a', '#dc2626'],
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+
+const overviewCtx = document.getElementById('overviewChart').getContext('2d');
+new Chart(overviewCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Users', 'Food Items', 'Expiring Soon', 'Headers'],
+        datasets: [{
+            label: 'Count',
+            data: [{{ $totalUsers ?? 0 }}, {{ $totalFoods ?? 0 }}, {{ $totalExpiringSoon ?? 0 }}, {{ $totalHeaders ?? 0 }}],
+            backgroundColor: ['#3b82f6', '#8b5cf6', '#f59e0b', '#06b6d4'],
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+        }
+    }
+});
+
+</script>
 
 @endsection
