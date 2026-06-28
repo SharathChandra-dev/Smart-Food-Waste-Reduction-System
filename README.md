@@ -34,6 +34,7 @@
 
 - [About the Project](#-about-the-project)
 - [Features](#-features)
+- [API Endpoints](#-api-endpoints)
 - [Tech Stack](#-tech-stack)
 - [Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
@@ -62,6 +63,9 @@ The system promotes sustainability by making surplus food visible and accessible
 - 🔐 **Secure Authentication** — Register, log in, and manage sessions
 - 🏠 **Food Listings Homepage** — Browse all available food items at a glance
 - 🔢 **Item Quantity Display** — See how many units of each item are available
+- 🙋 **Food Claim System** — Request available items with one click
+- 📋 **My Requests Page** — Track status of your claims (pending/approved/rejected)
+- 🏷️ **Expiry Status Badges** — Color-coded freshness indicators on every item
 - 📬 **Contact Form** — Reach out to admins directly through the platform
 
 ### 🛠️ Admin Features
@@ -70,11 +74,45 @@ The system promotes sustainability by making surplus food visible and accessible
 - 🗑️ **Delete Listings** — Remove items that are no longer available
 - 🏷️ **Editable Header/Branding** — Customize the site header name dynamically
 - 👥 **User Management** — Oversee registered users on the platform
+- ✅ **Claim Approval System** — Approve or reject user food requests
+- 📊 **Analytics Dashboard** — Live Chart.js charts for claims and system stats
+- ⏳ **Pending Requests Panel** — Review all pending food claims in one place
 
 ### 🔒 Security
 - Role-based access control (Admin vs User)
 - CSRF protection on all forms
 - Authenticated routes with middleware
+
+---
+
+## 📡 API Endpoints
+
+The system exposes a public REST API for integration or mobile use.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/foods | All available (non-expired) food items |
+| GET | /api/foods/{id} | Single food item by ID |
+
+Example response for GET /api/foods:
+
+```json
+{
+  "success": true,
+  "count": 3,
+  "data": [
+    {
+      "id_food_sfwr": 1,
+      "foodname_sfwr": "Veg Pizza",
+      "foodcategory_sfwr": "Cooked Food",
+      "expiry_date_sfwr": "2026-06-25",
+      "expiry_status": "fresh",
+      "foodquantity_sfwr": 5,
+      "pickup_location_sfwr": "Munich Center"
+    }
+  ]
+}
+```
 
 ---
 
@@ -181,11 +219,13 @@ smart-food-waste-reduction/
 │
 ├── app/
 │   ├── Http/Controllers/       # Auth, Admin, Food, Contact controllers
+│   ├── Http/Controllers/Api/   # Public REST API controllers
 │   ├── Models/                 # User, Food, SiteSettings models
+│   ├── Models/FoodClaimSfwr.php # Food claim/request model
 │   └── Middleware/             # Admin role middleware
 │
 ├── database/
-│   ├── migrations/             # Table schemas
+│   ├── migrations/             # Table schemas, including food_claims_sfwr migration
 │   └── seeders/                # Sample data seeders
 │
 ├── resources/
@@ -221,11 +261,11 @@ smart-food-waste-reduction/
 
 Planned improvements for future versions:
 
-- [ ] 🟡 Expiry date tracking with status badges (Fresh / Expiring Soon / Expired)
-- [ ] 📊 Admin dashboard with food waste analytics & charts
-- [ ] 🙋 Food claim/request system for users
-- [ ] 🔍 Search and filter by category or expiry
-- [ ] 📡 REST API endpoints for mobile integration
+- [x] 🟡 Expiry date tracking with status badges (Fresh / Expiring Soon / Expired)
+- [x] 📊 Admin dashboard with analytics charts
+- [x] 🙋 Food claim/request system for users
+- [x] 🔍 Search and filter by category
+- [x] 📡 REST API endpoints
 - [ ] 🌐 Deployment on Railway / Render
 
 ---
