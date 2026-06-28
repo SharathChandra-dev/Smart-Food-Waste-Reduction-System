@@ -18,6 +18,12 @@ class FoodClaimSfwr extends Model
         'claimed_at',
     ];
 
+    protected $casts = [
+        'claimed_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     public function foodItem(): BelongsTo
     {
         return $this->belongsTo(FoodItemSfwr::class, 'id_food_sfwr', 'id_food_sfwr');
