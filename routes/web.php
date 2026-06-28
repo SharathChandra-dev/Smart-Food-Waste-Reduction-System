@@ -135,9 +135,9 @@ Route::middleware('auth')->group(function () {
         ->name('claims.mine');
 });
 
-Route::get('/my-foods', function () {
-    return view('User.foods.myfoods');
-})->name('foods.myfoods');
+Route::get('/my-foods', [FoodClaimController::class, 'myClaims'])
+    ->middleware('auth')
+    ->name('foods.myfoods');
 
 Route::get('/orders', function () {
     return view('User.orders.index');
