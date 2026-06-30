@@ -1,222 +1,42 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+body.dark-mode .page-banner,
+body.dark-mode .hero-section,
+body.dark-mode .cta-card {
+    background:
+        radial-gradient(circle at top right, rgba(52, 211, 153, 0.16), transparent 34%),
+        linear-gradient(135deg, #0f1f18, #0a1410);
 }
 
-html{
-    scroll-behavior:smooth;
+body.dark-mode .food-card,
+body.dark-mode .contact-form,
+body.dark-mode .location-info,
+body.dark-mode .search-box,
+body.dark-mode .filter-dropdown,
+body.dark-mode .food-detail-item,
+body.dark-mode .food-location-card,
+body.dark-mode .food-contact-card {
+    background: var(--sfwr-surface);
+    border-color: var(--sfwr-border);
 }
 
-body{
-    font-family:'Poppins',sans-serif;
-    background:#fffaf5;
-    color:#3d2b1f;
+body.dark-mode .search-box input,
+body.dark-mode #filterSelect,
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea {
+    background: var(--sfwr-surface-soft);
+    color: var(--sfwr-text);
 }
 
-a{
-    text-decoration:none;
+body.dark-mode .food-content p,
+body.dark-mode .food-detail-item span,
+body.dark-mode .food-location-card span,
+body.dark-mode .food-contact-card span,
+body.dark-mode .location-info p {
+    color: var(--sfwr-muted);
 }
 
-img{
-    width:100%;
-    display:block;
-}
-
-.primary-btn{
-    background:linear-gradient(
-        135deg,
-        #c68a5a,
-        #9f653a
-    );
-    color:white;
-    padding:14px 22px;
-    border-radius:14px;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    transition:0.3s;
-    border:none;
-    cursor:pointer;
-}
-
-.primary-btn:hover{
-    transform:translateY(-2px);
-}
-
-.secondary-btn{
-    background:white;
-    color:#9f653a;
-    padding:14px 22px;
-    border-radius:14px;
-    border:1px solid #e9d4c2;
-}
-
-.section-title{
-    margin-bottom:35px;
-}
-
-.section-title h2{
-    font-size:40px;
-    margin-bottom:10px;
-}
-
-.section-title p{
-    color:#7b6454;
-}
-
-/* ================= HEADER ================= */
-
-.main-header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    background:white;
-    box-shadow:0 2px 10px rgba(0,0,0,0.05);
-}
-
-.header-container{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:20px 80px;
-}
-
-.logo{
-    font-size:30px;
-    font-weight:700;
-    color:#9f653a;
-}
-
-.desktop-nav{
-    display:flex;
-    gap:30px;
-}
-
-.desktop-nav a{
-    color:#3d2b1f;
-    font-weight:500;
-}
-
-.header-buttons{
-    display:flex;
-    gap:15px;
-}
-
-.login-btn{
-    color:#9f653a;
-    font-weight:600;
-}
-
-.register-btn{
-    background:#9f653a;
-    color:white;
-    padding:12px 18px;
-    border-radius:12px;
-}
-
-.menu-toggle{
-    display:none;
-    font-size:28px;
-    cursor:pointer;
-}
-
-.mobile-menu{
-    position:fixed;
-    top:0;
-    right:-100%;
-    width:280px;
-    height:100vh;
-    background:white;
-    z-index:2000;
-    padding:30px;
-    display:flex;
-    flex-direction:column;
-    gap:25px;
-    transition:0.4s;
-    box-shadow:-5px 0 20px rgba(0,0,0,0.08);
-}
-
-.mobile-menu.active{
-    right:0;
-}
-
-.mobile-close{
-    align-self:flex-end;
-    font-size:28px;
-    cursor:pointer;
-}
-
-.mobile-menu a{
-    color:#3d2b1f;
-    font-size:18px;
-    font-weight:500;
-}
-
-@media(max-width:900px){
-
-    .desktop-nav,
-    .header-buttons{
-        display:none;
-    }
-
-    .menu-toggle{
-        display:block;
-    }
-
-    .header-container{
-        padding:20px;
-    }
-}
-
-/* ================= FOOTER ================= */
-
-.main-footer{
-    background:#2d1d14;
-    color:white;
-    margin-top:80px;
-}
-
-.footer-container{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:40px;
-    padding:70px 80px;
-}
-
-.footer-box h2,
-.footer-box h3{
-    margin-bottom:20px;
-}
-
-.footer-box p{
-    color:#d8cfc9;
-    line-height:1.8;
-    margin-bottom:12px;
-}
-
-.footer-box a{
-    display:block;
-    color:#d8cfc9;
-    margin-bottom:15px;
-    transition:0.3s;
-}
-
-.footer-box a:hover{
-    color:white;
-}
-
-.footer-bottom{
-    border-top:1px solid rgba(255,255,255,0.08);
-    padding:25px;
-    text-align:center;
-    color:#d8cfc9;
-}
-
-@media(max-width:768px){
-
-    .footer-container{
-        grid-template-columns:1fr;
-        padding:50px 20px;
-    }
+body.dark-mode .food-detail-item strong,
+body.dark-mode .food-location-card strong,
+body.dark-mode .food-contact-card strong,
+body.dark-mode .food-content h3 {
+    color: var(--sfwr-text);
 }
