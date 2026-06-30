@@ -48,6 +48,17 @@ class AdminController extends Controller
         $approvedClaims = FoodClaimSfwr::where('status_sfwr', 'approved')->count();
         $rejectedClaims = FoodClaimSfwr::where('status_sfwr', 'rejected')->count();
 
+        $foodCategoryCounts = FoodItemSfwr::select('foodcategory_sfwr')
+            ->selectRaw('COUNT(*) as total')
+            ->whereNotNull('foodcategory_sfwr')
+            ->where('foodcategory_sfwr', '!=', '')
+            ->groupBy('foodcategory_sfwr')
+            ->orderBy('foodcategory_sfwr')
+            ->pluck('total', 'foodcategory_sfwr');
+
+        $foodCategoryLabels = $foodCategoryCounts->keys()->values();
+        $foodCategoryData = $foodCategoryCounts->values();
+
         return view('admin.admin_dashboard', compact(
             'totalUsers',
             'totalFoods',
@@ -56,7 +67,9 @@ class AdminController extends Controller
             'expiringFoods',
             'pendingClaims',
             'approvedClaims',
-            'rejectedClaims'
+            'rejectedClaims',
+            'foodCategoryLabels',
+            'foodCategoryData'
         ));
     }
 
