@@ -7,7 +7,13 @@
 @section('content')
 
 <div class="dashboard-container">
-    <h1>Admin Dashboard</h1>
+    <div class="dashboard-hero">
+        <div>
+            <span class="dashboard-kicker">System Overview</span>
+            <h1>Admin Dashboard</h1>
+            <p>Monitor food inventory, category mix, expiry urgency, and platform activity from one clean workspace.</p>
+        </div>
+    </div>
 
     <div class="stats-grid">
         <div class="stat-card">
@@ -53,21 +59,16 @@
         </div>
     </div>
 
-    <div class="welcome-section">
-        <h2>Welcome to SFWR Admin Panel</h2>
-        <p>Manage your system efficiently with our comprehensive admin dashboard. Navigate through the sidebar to manage users and food items.</p>
-    </div>
-
     <div class="chart-section">
         <div class="section-header">
             <h2>Analytics Overview</h2>
-            <p>Live breakdown of claims and system activity.</p>
+            <p>Live breakdown of food categories and system activity.</p>
         </div>
 
         <div class="chart-grid">
             <div class="chart-card">
-                <h3>Claims Breakdown</h3>
-                <canvas id="claimsChart"></canvas>
+                <h3>Food Categories</h3>
+                <canvas id="categoryChart"></canvas>
             </div>
 
             <div class="chart-card">
@@ -108,18 +109,36 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
-const claimsCtx = document.getElementById('claimsChart').getContext('2d');
-new Chart(claimsCtx, {
+const categoryLabels = @json($foodCategoryLabels ?? []);
+const categoryData = @json($foodCategoryData ?? []);
+const categoryColors = [
+    '#c68a5a',
+    '#16a34a',
+    '#3b82f6',
+    '#f59e0b',
+    '#8b5cf6',
+    '#06b6d4',
+    '#ef4444',
+    '#64748b',
+];
+
+const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+new Chart(categoryCtx, {
     type: 'doughnut',
     data: {
-        labels: ['Pending', 'Approved', 'Rejected'],
+        labels: categoryLabels.length ? categoryLabels : ['No categories yet'],
         datasets: [{
-            data: [{{ $pendingClaims ?? 0 }}, {{ $approvedClaims ?? 0 }}, {{ $rejectedClaims ?? 0 }}],
-            backgroundColor: ['#f59e0b', '#16a34a', '#dc2626'],
+            data: categoryData.length ? categoryData : [1],
+            backgroundColor: categoryLabels.length
+                ? categoryLabels.map((_, index) => categoryColors[index % categoryColors.length])
+                : ['#cbd5e1'],
+            borderColor: '#ffffff',
+            borderWidth: 3,
         }]
     },
     options: {
         responsive: true,
+        cutout: '62%',
         plugins: {
             legend: { position: 'bottom' }
         }
