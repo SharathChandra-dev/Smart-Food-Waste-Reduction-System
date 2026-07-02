@@ -18,6 +18,7 @@
 
     <!-- CSS -->
     @vite('resources/css/Admin/admin.css')
+    @yield('styles')
 
 </head>
 
@@ -52,14 +53,9 @@
 
             <div class="sidebar-menu">
 
-                <a href="#" class="active">
+                <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-chart-line"></i>
                     Dashboard
-                </a>
-
-                <a href="{{ route('admin.pending.food') }}">
-                    <i class="fa-solid fa-bowl-food"></i>
-                    Pending Food
                 </a>
 
                 <a href="#">
