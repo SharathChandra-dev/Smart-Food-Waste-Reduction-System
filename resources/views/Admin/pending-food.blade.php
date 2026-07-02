@@ -1,5 +1,9 @@
 @extends('Admin.layouts.admin')
 
+@section('styles')
+    @vite('resources/css/Admin/pending_food.css')
+@endsection
+
 @section('content')
 
 <section class="pending-section">
