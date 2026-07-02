@@ -95,9 +95,9 @@
 
             <p><a href="https://www.google.com/maps/place/SRH+Campus+Munich/@48.0961494,11.5088421,17z/data=!3m1!4b1!4m6!3m5!1s0x479dd98aaf6b661f:0x3afeab762b633b34!8m2!3d48.0961494!4d11.511417!16s%2Fg%2F11x_pdplc8?entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">SRH Campus Munich</a></p>
 
-            <p><a href="mailto:Nilesh.Dokuparthi@stud.srh-university.de">Mail</a></p>
+            <p><a href="mailto:Sharath.workdev@gmail.com">Mail</a></p>
 
-            <p>+49 123 456 789</p>
+            <p>+49 155 10323692</p>
 
         </div>
 
