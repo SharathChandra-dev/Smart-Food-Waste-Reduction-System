@@ -46,13 +46,12 @@
 
                 <h1>
                     Smart Food Waste <br>
-                    Reducer 
+                    Reducer
                 </h1>
 
                 <p>
-                    Manage users, monitor food distribution activities,
-                    oversee analytics, and maintain sustainability operations
-                    through a centralized administrative system.
+                    Browse available food, connect with local providers,
+                    and help reduce avoidable waste with a trusted community platform.
                 </p>
 
                 <!-- ADMIN FEATURES -->
@@ -63,8 +62,8 @@
                         <i class="fa-solid fa-chart-line"></i>
 
                         <div>
-                            <h3>Analytics Dashboard</h3>
-                            <p>Monitor platform statistics and activity.</p>
+                            <h3>Available Food</h3>
+                            <p>Find fresh shared items with clear pickup details.</p>
                         </div>
                     </div>
 
@@ -72,8 +71,8 @@
                         <i class="fa-solid fa-users"></i>
 
                         <div>
-                            <h3>User Management</h3>
-                            <p>Control and manage platform users securely.</p>
+                            <h3>Trusted Contacts</h3>
+                            <p>Use verified contact details to coordinate quickly.</p>
                         </div>
                     </div>
 
@@ -82,7 +81,7 @@
 
                         <div>
                             <h3>Secure Access</h3>
-                            <p>Protected authentication and admin controls.</p>
+                            <p>Protected login for a safer food-sharing experience.</p>
                         </div>
                     </div>
 
