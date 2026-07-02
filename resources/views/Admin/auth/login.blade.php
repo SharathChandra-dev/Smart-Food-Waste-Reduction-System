@@ -50,7 +50,7 @@
                     <i class="fa-solid fa-user-shield"></i>
                 </div>
 
-                <h2>Admin Login</h2><form method="POST" action="{{ route('admin.login.submit') }}">
+                <h2>Admin Login</h2>
 
                 <p>
                     Authorized administrators only.
