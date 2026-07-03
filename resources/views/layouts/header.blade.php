@@ -4,33 +4,20 @@
 
         <!-- LOGO -->
 
-        <a href="{{ route('home') }}"
-        class="logos">
-
-            <div class="logos">
-
-                <h2>
-                    {{ $userHeaderTitle ?? 'Smart Food Waste Reducer(SFWR)' }}
-                </h2>
-
-                <!-- <span>
-                    Sustainable Food Waste Reducer
-                </span> -->
-
-            </div>
-
+        <a href="{{ route('home') }}" class="logos">
+            <h2>{{ $userHeaderTitle ?? 'Smart Food Waste Reducer(SFWR)' }}</h2>
         </a>
 
         <!-- DESKTOP NAV -->
 
         <nav class="desktop-nav">
 
-            <a href="{{ route('home') }}">
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
                 Home
             </a>
 
             @auth
-                <a href="{{ route('foods.index') }}">
+                <a href="{{ route('foods.index') }}" class="{{ request()->routeIs('foods.index') ? 'active' : '' }}">
                     Foods
                 </a>
             @endauth
@@ -116,7 +103,7 @@
 
             <form method="POST" action="{{ route('admin.logout') }}" style="display:inline;">
                 @csrf
-                <button type="submit" style="background:none; border:none; color:#fff; font-size:1rem; cursor:pointer; padding:0;">Logout</button>
+                <button type="submit" style="background:none; border:none; cursor:pointer; padding:0;">Logout</button>
             </form>
         @endguest
 
@@ -156,9 +143,12 @@
     function setTheme(theme) {
         const dark = theme === 'dark';
         document.body.classList.toggle('dark-mode', dark);
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
 
         themeButtons.forEach(btn => {
-            btn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            btn.innerHTML = dark
+                ? '<i class="fa-solid fa-sun"></i>'
+                : '<i class="fa-solid fa-moon"></i>';
         });
 
         localStorage.setItem('sfwrTheme', theme);
