@@ -88,9 +88,13 @@
                 'expiring_soon' => ['food-badge--warning', '🟡 Expiring Soon'],
                 'expired' => ['food-badge--expired', '🔴 Expired'],
             ];
-            [$badgeClass, $badgeLabel] = $badgeMap[$food->expiry_status];
+            [$badgeClass, $badgeLabel] = $badgeMap[$food->expiry_status] ?? $badgeMap['fresh'];
 
-            $claimStatus = $myClaims[$food->id_food_sfwr] ?? null;
+            $phoneNumber = preg_replace('/\D+/', '', $food->contact_sfwr ?? '');
+            $whatsAppUrl = $phoneNumber ? 'https://wa.me/' . $phoneNumber : null;
+            $expiryDate = $food->expiry_date_sfwr
+                ? \Carbon\Carbon::parse($food->expiry_date_sfwr)->format('M d, Y')
+                : 'N/A';
         @endphp
 
         <div
@@ -120,71 +124,69 @@
                     <h3>{{ $food->foodname_sfwr }}</h3>
                 </div>
 
-                <p>{{ $food->fooddescription_sfwr }}</p>
+                <div class="food-detail-grid">
 
-                <div class="food-meta">
+                    <div class="food-detail-item">
+                        <i class="fa-solid fa-tag"></i>
+                        <div>
+                            <span>Category</span>
+                            <strong>{{ $food->foodcategory_sfwr ?: 'N/A' }}</strong>
+                        </div>
+                    </div>
 
-                    <span>
-                        Category:
-                        {{ $food->foodcategory_sfwr }}
-                    </span>
+                    <div class="food-detail-item">
+                        <i class="fa-solid fa-box"></i>
+                        <div>
+                            <span>Quantity</span>
+                            <strong>{{ $food->foodquantity_sfwr ?? 'N/A' }}</strong>
+                        </div>
+                    </div>
 
-                </div>
+                    <div class="food-detail-item">
+                        <i class="fa-solid fa-fire"></i>
+                        <div>
+                            <span>Calories</span>
+                            <strong>{{ $food->calories_sfwr ?? 'N/A' }} kcal</strong>
+                        </div>
+                    </div>
 
-                <div class="food-meta">
-
-                    <span>
-                        Manufacturing:
-                        {{ $food->manufacturing_date_sfwr }}
-                    </span>
-
-                    <span>
-                        Expiry:
-                        {{ $food->expiry_date_sfwr }}
-                    </span>
-
-                </div>
-
-                <div class="food-meta food-meta--secondary">
-
-                    <span>
-                        Quantity:
-                        {{ $food->foodquantity_sfwr }}
-                    </span>
-
-                    <span>
-                        Calories:
-                        {{ $food->calories_sfwr }} kcal
-                    </span>
+                    <div class="food-detail-item">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <div>
+                            <span>Expiry</span>
+                            <strong>{{ $expiryDate }}</strong>
+                        </div>
+                    </div>
 
                 </div>
 
-                <div class="food-footer">
-
-                    <span>
-                        Contact:
-                        {{ $food->contact_sfwr }}
-                    </span>
-
+                <div class="food-location-card">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div>
+                        <span>Pickup Location</span>
+                        <strong>{{ $food->pickup_location_sfwr ?: 'N/A' }}</strong>
+                    </div>
                 </div>
 
-                <div class="food-action">
+                <div class="food-contact-card">
 
-                    @if($claimStatus === 'pending')
-                        <button class="btn-claim btn-claim--pending" disabled>
-                            <i class="fa-solid fa-clock"></i> Request Pending
-                        </button>
-                    @elseif($claimStatus === 'approved')
-                        <button class="btn-claim btn-claim--approved" disabled>
-                            <i class="fa-solid fa-check"></i> Approved
-                        </button>
-                    @else
-                        <form action="{{ route('foods.claim', $food->id_food_sfwr) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn-claim btn-claim--request">
-                                <i class="fa-solid fa-hand-holding-heart"></i> Request This Item
-                            </button>
-                        </form>
+                    <div class="food-contact-info">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <div>
+                            <span>WhatsApp / Contact Number</span>
+                            <strong>{{ $food->contact_sfwr ?: 'N/A' }}</strong>
+                        </div>
+                    </div>
+
+                    @if($whatsAppUrl)
+                        <a
+                            href="{{ $whatsAppUrl }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="whatsapp-link">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            Chat
+                        </a>
                     @endif
 
                 </div>
