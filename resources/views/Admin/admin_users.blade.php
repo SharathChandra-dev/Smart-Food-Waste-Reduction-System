@@ -129,6 +129,17 @@
         </div>
     @endif
 
+    @if($errors->any())
+        <div class="alert alert-error" role="alert">
+            <strong>Please correct the following:</strong>
+            <ul style="margin: 8px 0 0; padding-left: 22px;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @if(isset($users) && count($users) > 0)
         <table>
             <thead>
@@ -179,13 +190,14 @@
         </div>
         <form class="modal-form" action="{{ route('admin.users.store') }}" method="POST">
             @csrf
-            <input type="text" name="name" placeholder="User Name" required>
-            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="hidden" name="form_type" value="add">
+            <input type="text" name="name" placeholder="User Name" value="{{ old('name') }}" required>
+            <input type="email" name="email" placeholder="Email Address" value="{{ old('email') }}" required>
             <select name="role" required>
-                <option value="User">User</option>
-                <option value="Admin">Admin</option>
+                <option value="User" @selected(old('role', 'User') === 'User')>User</option>
+                <option value="Admin" @selected(old('role') === 'Admin')>Admin</option>
             </select>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="password" placeholder="Password (at least 8 characters)" minlength="8" required>
             <div style="display: flex; gap: 10px;">
                 <button type="submit" class="btn" style="flex: 1; margin: 0;">Add User</button>
                 <button type="button" onclick="closeAddUserModal()" style="flex: 1; background: #ccc; color: #333;">Cancel</button>
@@ -204,6 +216,7 @@
         <form class="modal-form" id="editUserForm" method="POST">
             @csrf
             @method('PUT')
+            <input type="hidden" name="form_type" value="edit">
             <input type="text" name="name" id="editUserName" placeholder="User Name" required>
             <input type="email" name="email" id="editUserEmail" placeholder="Email Address" required>
             <select name="role" id="editUserRole" required>
@@ -223,6 +236,10 @@
     function openAddUserModal() {
         document.getElementById('addUserModal').classList.add('active');
     }
+
+    @if($errors->any() && old('form_type') === 'add')
+        openAddUserModal();
+    @endif
 
     function closeAddUserModal() {
         document.getElementById('addUserModal').classList.remove('active');
