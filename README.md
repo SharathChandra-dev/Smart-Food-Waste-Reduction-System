@@ -1,302 +1,147 @@
-<div align="center">
+# Smart Food Waste Reduction
 
-# 🥗 Smart Food Waste Reduction System
+A Laravel web application for redistributing surplus food. Admins manage food listings and review requests; users browse available food, submit claims, and manage food-intake records. The app also provides contact replies, two-factor authentication, and a read-only food API.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"/>
-  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP"/>
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"/>
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3"/>
-  <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap"/>
-</p>
+## Requirements
 
-<p align="center">
-  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"/>
-  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" alt="Status"/>
-  <img src="https://img.shields.io/badge/PRs-Welcome-blue?style=flat-square" alt="PRs Welcome"/>
-</p>
+- PHP 8.3 or newer
+- Composer
+- MySQL (or another Laravel-supported database configured in `.env`)
+- Node.js and npm for frontend assets
 
-<br/>
+This repository currently requires Laravel 13 (`composer.json`).
 
-> A full-stack web application built with Laravel that helps communities reduce food waste by connecting food providers with users who can claim available food items — before they go to waste.
+## Getting started
 
-<br/>
-
-<!-- Replace with your actual screenshot -->
-<!-- ![App Screenshot](screenshots/homepage.png) -->
-
-</div>
-
----
-
-## 📋 Table of Contents
-
-- [About the Project](#-about-the-project)
-- [Features](#-features)
-- [API Endpoints](#-api-endpoints)
-- [Tech Stack](#-tech-stack)
-- [Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#-usage)
-- [Project Structure](#-project-structure)
-<!-- - [Screenshots](#-screenshots) -->
-- [Roadmap](#-roadmap)
-- [Contributing](#-contributing)
-<!-- - [License](#-license) -->
-- [Contact](#-contact)
-
----
-
-## 🌱 About the Project
-
-The **Smart Food Waste Reduction System** is a community-driven platform designed to tackle food waste at a local level. Admins can post available food items, manage listings, and customize the platform — while registered users can browse, view, and engage with food offerings in real time.
-
-The system promotes sustainability by making surplus food visible and accessible, encouraging redistribution rather than disposal.
-
----
-
-## ✨ Features
-
-### 👤 User Features
-- 🔐 **Secure Authentication** — Register, log in, and manage sessions
-- 🏠 **Food Listings Homepage** — Browse all available food items at a glance
-- 🔢 **Item Quantity Display** — See how many units of each item are available
-- 🙋 **Food Claim System** — Request available items with one click
-- 📋 **My Requests Page** — Track status of your claims (pending/approved/rejected)
-- 🏷️ **Expiry Status Badges** — Color-coded freshness indicators on every item
-- 📬 **Contact Form** — Reach out to admins directly through the platform
-
-### 🛠️ Admin Features
-- ➕ **Add Food Items** — Post new food listings with details and quantity
-- ✏️ **Edit Food Items** — Update existing listings in real time
-- 🗑️ **Delete Listings** — Remove items that are no longer available
-- 🏷️ **Editable Header/Branding** — Customize the site header name dynamically
-- 👥 **User Management** — Oversee registered users on the platform
-- ✅ **Claim Approval System** — Approve or reject user food requests
-- 📊 **Analytics Dashboard** — Live Chart.js charts for claims and system stats
-- ⏳ **Pending Requests Panel** — Review all pending food claims in one place
-
-### 🔒 Security
-- Role-based access control (Admin vs User)
-- CSRF protection on all forms
-- Authenticated routes with middleware
-
----
-
-## 📡 API Endpoints
-
-The system exposes a public REST API for integration or mobile use.
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/foods | All available (non-expired) food items |
-| GET | /api/foods/{id} | Single food item by ID |
-
-Example response for GET /api/foods:
-
-```json
-{
-  "success": true,
-  "count": 3,
-  "data": [
-    {
-      "id_food_sfwr": 1,
-      "foodname_sfwr": "Veg Pizza",
-      "foodcategory_sfwr": "Cooked Food",
-      "expiry_date_sfwr": "2026-06-25",
-      "expiry_status": "fresh",
-      "foodquantity_sfwr": 5,
-      "pickup_location_sfwr": "Munich Center"
-    }
-  ]
-}
-```
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| **Backend Framework** | Laravel 10.x (PHP) |
-| **Database** | MySQL via phpMyAdmin |
-| **Frontend** | HTML5, CSS3, Bootstrap |
-| **Authentication** | Laravel Breeze / Auth |
-| **ORM** | Eloquent ORM |
-| **Templating** | Blade Templates |
-| **Dev Environment** | XAMPP / Laravel Artisan |
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-Make sure you have the following installed:
-
-- [PHP](https://www.php.net/) >= 8.1
-- [Composer](https://getcomposer.org/)
-- [MySQL](https://www.mysql.com/) (via XAMPP or standalone)
-- [Node.js & NPM](https://nodejs.org/) (for frontend assets)
-
----
-
-### Installation
-
-**1. Clone the repository**
-```bash
-git clone https://github.com/sharathchandra-dev/smart-food-waste-reduction.git
-cd smart-food-waste-reduction
-```
-
-**2. Install PHP dependencies**
 ```bash
 composer install
-```
-
-**3. Install frontend dependencies**
-```bash
-npm install && npm run dev
-```
-
-**4. Set up environment variables**
-```bash
+npm install
 cp .env.example .env
 php artisan key:generate
 ```
 
-**5. Configure your database in `.env`**
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=sfwr
-DB_USERNAME=root
-DB_PASSWORD=
-```
+Configure the database and mailer in `.env`, then initialize the database and start the app:
 
-**6. Run database migrations**
 ```bash
 php artisan migrate
-```
-
-**7. (Optional) Seed sample data**
-```bash
-php artisan db:seed
-```
-
-**8. Start the development server**
-```bash
 php artisan serve
 ```
 
-Visit `http://localhost:8000` in your browser. 🎉
+In a second terminal, run Vite while developing the frontend:
 
----
-
-## 🖥️ Usage
-
-### As an Admin
-1. Log in with admin credentials
-2. Navigate to the **Admin Panel**
-3. Add, edit, or remove food listings
-4. Customize the site header from the settings panel
-
-### As a User
-1. Register for an account or log in
-2. Browse the homepage for available food items
-3. View quantities and details for each listing
-4. Use the **Contact Form** to get in touch with the admin
-
----
-
-## 📁 Project Structure
-
-```
-smart-food-waste-reduction/
-│
-├── app/
-│   ├── Http/Controllers/       # Auth, Admin, Food, Contact controllers
-│   ├── Http/Controllers/Api/   # Public REST API controllers
-│   ├── Models/                 # User, Food, SiteSettings models
-│   ├── Models/FoodClaimSfwr.php # Food claim/request model
-│   └── Middleware/             # Admin role middleware
-│
-├── database/
-│   ├── migrations/             # Table schemas, including food_claims_sfwr migration
-│   └── seeders/                # Sample data seeders
-│
-├── resources/
-│   ├── views/
-│   │   ├── admin/              # Admin panel views
-│   │   ├── foods/              # Food listing views
-│   │   ├── auth/               # Login & Register views
-│   │   └── layouts/            # Main app layout
-│   └── css/                    # Custom stylesheets
-│
-├── routes/
-│   └── web.php                 # Application routes
-│
-└── public/                     # Publicly accessible assets
+```bash
+npm run dev
 ```
 
-<!-- ---
+Open the URL printed by `php artisan serve` (usually `http://127.0.0.1:8000`). To build frontend assets for deployment, run `npm run build`.
 
-## 📸 Screenshots
+### Handy commands
 
-> *(Add your screenshots here by placing images in a `/screenshots` folder)*
+```bash
+php artisan route:list             # List routes, handlers, and middleware
+php artisan migrate:status         # Show migration status
+php artisan db:seed                # Run the configured seeders
+php artisan app:delete-expired-foods # Delete listings whose expiry date has passed
+php artisan optimize:clear         # Clear Laravel caches
+```
 
-| Page | Preview |
-|---|---|
-| 🏠 Homepage | `screenshots/homepage.png` |
-| 🛠️ Admin Panel | `screenshots/admin-panel.png` |
-| 🔐 Login Page | `screenshots/login.png` |
-| 📬 Contact Form | `screenshots/contact.png` | -->
+`composer run dev` starts the Laravel server, queue listener, log tail, and Vite together. `composer run test` runs the project test suite. `composer run setup` installs dependencies, prepares the environment, migrates, and builds assets.
 
----
+The expired-food command is not scheduled by the application. Run it manually, or configure your server's scheduler/cron to invoke it at the interval you want. It deletes listings with an expiry date earlier than today; food expiring today remains available until the next day. The listing is deleted through Eloquent so its linked intake record is also cleaned up by the model event. Claims linked to the food are subject to the database foreign-key cascade.
 
-## 🗺️ Roadmap
+## Features
 
-Planned improvements for future versions:
+- User and Admin sign-in, registration, and role checks
+- Optional authenticator-app two-factor authentication
+- Food listing creation, updates, images, search, and category filtering
+- User claims with pending, approved, and rejected states
+- Admin dashboard with food, account, expiry, and claim counts
+- Configurable site headings
+- Contact form and admin email replies
+- Food-intake records and expiring/consumed food JSON responses
+- Public read-only food API
 
-- [x] 🟡 Expiry date tracking with status badges (Fresh / Expiring Soon / Expired)
-- [x] 📊 Admin dashboard with analytics charts
-- [x] 🙋 Food claim/request system for users
-- [x] 🔍 Search and filter by category
-- [x] 📡 REST API endpoints
-- [ ] 🌐 Deployment on Railway / Render
+## Routes and API
 
----
+The main route definitions are in `routes/web.php` and `routes/api.php`. Use `php artisan route:list` for the complete, current list.
 
-## 🤝 Contributing
+| Method | URL | Purpose |
+|---|---|---|
+| GET | `/` | Home page |
+| GET | `/login`, `/register` | User sign-in and registration pages |
+| GET/POST | `/admin/login`, `/admin/login-submit` | Admin sign-in |
+| GET/POST | `/2fa/setup`, `/2fa/verify` | Configure or verify two-factor authentication |
+| GET | `/foods` | Browse available food (signed in) |
+| POST | `/foods/claim/{id}` | Request a food listing (signed in) |
+| GET | `/my-claims` | View the signed-in user's claims |
+| GET | `/admin/dashboard` | Admin dashboard (signed in) |
+| GET | `/admin/food`, `/admin/pending-food` | Manage food and pending claims (Admin) |
+| GET | `/api/foods` | List non-expired food as JSON |
+| GET | `/api/foods/{id}` | Get one food record as JSON |
 
-Contributions are welcome! If you'd like to improve this project:
+Food-intake routes are also defined in `routes/web.php`; they return JSON. Admin pages and actions use role middleware where configured. The API routes above are public.
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Commit your changes: `git commit -m 'Add some feature'`
-4. Push to the branch: `git push origin feature/your-feature`
-5. Open a Pull Request
+## Project structure
 
-<!-- ---
+```text
+app/
+  Console/Commands/       Custom Artisan commands
+  Http/Controllers/       Web request handlers
+    Api/                  JSON API handlers
+  Http/Middleware/        Authentication/role checks
+  Mail/                   Mail message classes
+  Models/                 Eloquent database models
+  Providers/              Application service providers
+  Services/               Reusable services (2FA)
+bootstrap/                Laravel startup configuration
+config/                   Framework and application settings
+database/
+  factories/              Fake model data
+  migrations/             Database schema history
+  seeders/                Optional initial/sample data
+public/                   Web entry point and public assets
+resources/
+  css/                    Admin, user, and shared stylesheets
+  js/                     Frontend JavaScript entry point
+  views/                  Blade pages and email templates
+routes/                   Web, API, and console route definitions
+storage/                  Logs, cache, sessions, compiled views, uploads
+tests/                    Unit and feature tests
+```
 
-## 📄 License
+### Important application files
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details. -->
+- `app/Http/Controllers/AuthController.php` — sign-in, registration, and 2FA flow.
+- `app/Http/Controllers/AdminController.php` — dashboard data, account management, and configurable headings.
+- `app/Http/Controllers/FoodController.php` — food listing CRUD, browse/search/filter.
+- `app/Http/Controllers/FoodClaimController.php` — create and review food claims.
+- `app/Http/Controllers/FoodIntakeController.php` — JSON operations for food-intake records.
+- `app/Http/Controllers/ContactController.php` — contact messages and admin email replies.
+- `app/Http/Controllers/Api/FoodApiController.php` — public food JSON endpoints.
+- `app/Http/Middleware/RoleMiddleware.php` — checks a user's role for protected routes.
+- `app/Services/Google2faService.php` — creates and verifies authenticator codes.
+- `app/Models/FoodItemSfwr.php` — food model, relationships, expiry scopes/status, and linked intake lifecycle.
+- `app/Models/FoodClaimSfwr.php` — claim model and food/user relationships.
+- `app/Models/FoodIntakeSfwr.php` — intake model and relationships.
+- `app/Models/User.php` — authenticatable user model using the app's custom table and columns.
+- `app/Models/Contact.php`, `HeaderSfwr.php`, `UserTwoFactor.php` — contact, configurable heading, and 2FA records.
+- `app/Console/Commands/DeleteExpiredFoods.php` — removes food listings that expired before today.
+- `bootstrap/app.php` — registers route files and the `/up` health endpoint.
+- `vite.config.js` — selects frontend CSS/JS build inputs.
+- `composer.json` and `package.json` — PHP/JavaScript dependencies and project scripts.
 
----
+The `resources/views/Admin` and `resources/views/User` folders contain the corresponding Blade screens. `resources/views/layouts` and `resources/views/layouts/*` contain shared layouts/components; `resources/views/2fa` contains 2FA pages; `resources/views/emails` contains the contact-reply email template. Styles are grouped under `resources/css/Admin`, `resources/css/User`, and `resources/css/components`.
 
-## 📬 Contact
+## Database notes
 
-**Sharath Chandra** — Computer Science Student @ SRH University Munich
+Application tables and columns use custom names such as `FoodItems_sfwr`, `foodname_sfwr`, and `id_user_sfwr`; the models declare these names explicitly. Migrations create and evolve the schema. Review `.env` before running migrations against any database containing data. `DatabaseSeeder` creates a sample user; `FoodIntakeSeeder` contains optional intake/sample data and is not automatically run by `db:seed` unless added to `DatabaseSeeder`.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/sharath-c1)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sharathchandra-dev)
+## Tests
 
----
+Run the existing suite with:
 
-<div align="center">
-  <sub>Built with ❤️ to reduce food waste, one listing at a time.</sub>
-</div>
+```bash
+composer run test
+```
+
+The `tests/Unit` and `tests/Feature` directories contain the current test files.
