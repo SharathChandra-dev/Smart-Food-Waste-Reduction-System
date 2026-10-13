@@ -30,7 +30,8 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $totalUsers = User::count();
+        $totalUsers = User::where('role_sfwr', 'User')->count();
+        $totalAdmins = User::where('role_sfwr', 'Admin')->count();
         $totalFoods = FoodItemSfwr::count();
         $totalHeaders = HeaderSfwr::count();
 
@@ -61,6 +62,7 @@ class AdminController extends Controller
 
         return view('admin.admin_dashboard', compact(
             'totalUsers',
+            'totalAdmins',
             'totalFoods',
             'totalHeaders',
             'totalExpiringSoon',
