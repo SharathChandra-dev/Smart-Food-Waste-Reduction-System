@@ -41,6 +41,7 @@ Open the URL printed by `php artisan serve` (usually `http://127.0.0.1:8000`). T
 php artisan route:list             # List routes, handlers, and middleware
 php artisan migrate:status         # Show migration status
 php artisan db:seed                # Run the configured seeders
+php artisan db:seed --class='Database\Seeders\FoodCatalogSeeder' # Add the 30 sample food listings
 php artisan app:delete-expired-foods # Delete listings whose expiry date has passed
 php artisan optimize:clear         # Clear Laravel caches
 ```
@@ -48,6 +49,8 @@ php artisan optimize:clear         # Clear Laravel caches
 `composer run dev` starts the Laravel server, queue listener, log tail, and Vite together. `composer run test` runs the project test suite. `composer run setup` installs dependencies, prepares the environment, migrates, and builds assets.
 
 The expired-food command is not scheduled by the application. Run it manually, or configure your server's scheduler/cron to invoke it at the interval you want. It deletes listings with an expiry date earlier than today; food expiring today remains available until the next day. The listing is deleted through Eloquent so its linked intake record is also cleaned up by the model event. Claims linked to the food are subject to the database foreign-key cascade.
+
+`FoodCatalogSeeder` loads 30 sample listings for SRH Campus Munich with local food photos and visible source/license credits. The seeder can be run again safely without duplicating the catalog entries.
 
 ## Features
 
