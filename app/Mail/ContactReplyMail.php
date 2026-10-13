@@ -21,7 +21,8 @@ class ContactReplyMail extends Mailable
     public function build()
     {
         return $this->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Response from SFWR Admin')
+            ->replyTo(config('mail.from.address'), config('mail.from.name'))
+            ->subject('Re: ' . ($this->contact->subject_sfwr ?: 'Your message to SFWR'))
             ->view('emails.contact_reply');
     }
 }
