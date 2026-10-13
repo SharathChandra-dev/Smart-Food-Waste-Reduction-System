@@ -5,7 +5,7 @@
     <title>SFWR Admin Response</title>
 </head>
 <body>
-    <h1>Response from SFWR Admin</h1>
+    <h1> Admin</h1>
 
     <p>Hi {{ $contact->name_sfwr }},</p>
 
