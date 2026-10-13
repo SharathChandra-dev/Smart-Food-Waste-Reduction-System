@@ -141,9 +141,22 @@
 <div class="food-container">
 
     <div class="header-section">
-        <h1>Food Items Management</h1>
+        <div>
+            <span class="dashboard-kicker">Inventory</span>
+            <h1>{{ $expiredView ? 'Expired Foods' : 'Food Items Management' }}</h1>
+            <p class="food-page-subtitle">{{ $expiredView ? 'Review and remove food that is past its expiry date.' : 'Keep your listings current and easy to manage.' }}</p>
+        </div>
         <button class="add-food-btn" onclick="openAddFoodModal()">+ Add Food Item</button>
     </div>
+
+    <nav class="food-tabs" aria-label="Food item sections">
+        <a href="{{ route('admin.food') }}" class="{{ empty($expiredView) ? 'active' : '' }}">
+            All food <span>{{ $foodCounts['active'] ?? 0 }}</span>
+        </a>
+        <a href="{{ route('admin.food', ['status' => 'expired']) }}" class="{{ !empty($expiredView) ? 'active expired-tab' : '' }}">
+            Expired foods <span>{{ $foodCounts['expired'] ?? 0 }}</span>
+        </a>
+    </nav>
 
     @if(isset($foodItems) && count($foodItems) > 0)
 
@@ -203,7 +216,7 @@
     </table>
 
     @else
-        <p>No food items found</p>
+        <div class="no-food">{{ !empty($expiredView) ? 'There are no expired food items.' : 'There are no current food items.' }}</div>
     @endif
 </div>
 
