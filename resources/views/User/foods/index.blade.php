@@ -95,6 +95,7 @@
             $expiryDate = $food->expiry_date_sfwr
                 ? \Carbon\Carbon::parse($food->expiry_date_sfwr)->format('M d, Y')
                 : 'N/A';
+            $photoCredit = $foodImageCredits[$food->foodimage_sfwr] ?? null;
         @endphp
 
         <div
@@ -107,10 +108,21 @@
                 @if($food->foodimage_sfwr)
                     <img
                         src="{{ asset('storage/'.$food->foodimage_sfwr) }}"
-                        alt="Food image">
+                        alt="{{ $food->foodname_sfwr }}">
                 @else
                     <span>No Image</span>
                 @endif
+
+                <!-- @if($photoCredit)
+                    <div class="food-image-credit">
+                        <a href="{{ $photoCredit['source_url'] }}" target="_blank" rel="noopener noreferrer" title="{{ $photoCredit['title'] }} by {{ $photoCredit['author'] }}">Photo: {{ $photoCredit['author'] }}</a>
+                        @if(!empty($photoCredit['license_url']))
+                            <a href="{{ $photoCredit['license_url'] }}" target="_blank" rel="noopener noreferrer">{{ $photoCredit['license'] }}</a>
+                        @else
+                            <small>{{ $photoCredit['license'] }}</small>
+                        @endif
+                    </div>
+                @endif -->
 
                 <span class="food-badge {{ $badgeClass }}">
                     {{ $badgeLabel }}
@@ -122,6 +134,9 @@
 
                 <div class="food-top">
                     <h3>{{ $food->foodname_sfwr }}</h3>
+                    <!-- @if(str_starts_with($food->fooddescription_sfwr ?? '', 'Sample catalog listing.'))
+                        <span class="food-sample-label">Sample listing</span>
+                    @endif -->
                 </div>
 
                 <div class="food-detail-grid">
