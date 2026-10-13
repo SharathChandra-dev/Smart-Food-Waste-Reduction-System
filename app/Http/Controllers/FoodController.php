@@ -6,14 +6,32 @@ namespace App\Http\Controllers;
 use App\Models\FoodItemSfwr;
 use App\Models\FoodClaimSfwr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
     public function adminIndex()
     {
-        $foodItems = FoodItemSfwr::orderBy('id_food_sfwr', 'desc')->get();
+        $expiredView = request()->query('status') === 'expired';
+        $foodItems = FoodItemSfwr::query()
+            ->when($expiredView,
+                fn ($query) => $query->whereDate('expiry_date_sfwr', '<', now()->toDateString()),
+                fn ($query) => $query->where(function ($query) {
+                    $query->whereNull('expiry_date_sfwr')
+                        ->orWhereDate('expiry_date_sfwr', '>=', now()->toDateString());
+                })
+            )
+            ->orderBy('id_food_sfwr', 'desc')
+            ->get();
+        $foodCounts = [
+            'active' => FoodItemSfwr::where(function ($query) {
+                $query->whereNull('expiry_date_sfwr')
+                    ->orWhereDate('expiry_date_sfwr', '>=', now()->toDateString());
+            })->count(),
+            'expired' => FoodItemSfwr::whereDate('expiry_date_sfwr', '<', now()->toDateString())->count(),
+        ];
 
-        return view('Admin.fooditems', compact('foodItems'));
+        return view('Admin.fooditems', compact('foodItems', 'foodCounts', 'expiredView'));
     }
 
     public function store(Request $request)
@@ -103,6 +121,11 @@ class FoodController extends Controller
             ->whereIn('id_food_sfwr', $foods->pluck('id_food_sfwr'))
             ->pluck('status_sfwr', 'id_food_sfwr');
 
-        return view('User.foods.index', compact('foods', 'categories', 'myClaims'));
+        $creditFile = 'foods/demo-catalog/credits.json';
+        $foodImageCredits = Storage::disk('public')->exists($creditFile)
+            ? (json_decode(Storage::disk('public')->get($creditFile), true) ?: [])
+            : [];
+
+        return view('User.foods.index', compact('foods', 'categories', 'myClaims', 'foodImageCredits'));
     }
 }
