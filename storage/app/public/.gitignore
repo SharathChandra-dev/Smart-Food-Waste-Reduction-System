@@ -1,2 +1,8 @@
 *
 !.gitignore
+!foods/
+foods/*
+!foods/demo-catalog/
+foods/demo-catalog/*
+!foods/demo-catalog/*.jpg
+!foods/demo-catalog/credits.json
