@@ -6,6 +6,7 @@ use App\Mail\ContactReplyMail;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class ContactController extends Controller
 {
@@ -41,10 +42,27 @@ class ContactController extends Controller
         ]);
 
         $contact->admin_response_sfwr = $request->admin_response;
-        $contact->replied_at_sfwr = now();
+        $contact->replied_at_sfwr = null;
         $contact->save();
 
-        Mail::to($contact->email_sfwr)->send(new ContactReplyMail($contact));
+        if (config('mail.default') === 'log') {
+            Mail::to($contact->email_sfwr)->send(new ContactReplyMail($contact));
+
+            return back()->with('warning', 'The reply was saved and written to the application mail log, not delivered. Configure SMTP in .env and send it again.');
+        }
+
+        try {
+            Mail::to($contact->email_sfwr)->send(new ContactReplyMail($contact));
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return back()->withInput()->withErrors([
+                'mail' => 'The reply could not be delivered. Check the mail server settings and try again.',
+            ]);
+        }
+
+        $contact->replied_at_sfwr = now();
+        $contact->save();
 
         return back()->with('success', 'Reply sent successfully to ' . $contact->email_sfwr);
     }
