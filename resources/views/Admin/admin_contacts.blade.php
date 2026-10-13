@@ -15,6 +15,14 @@
         </div>
     @endif
 
+    @if(session('warning'))
+        <div class="alert" style="margin-bottom:20px;padding:12px;background:#fff7e6;border:1px solid #f4d28a;color:#76520d;">{{ session('warning') }}</div>
+    @endif
+
+    @if($errors->any())
+        <div class="alert alert-error" role="alert">{{ $errors->first() }}</div>
+    @endif
+
     @if($contacts->isEmpty())
         <p>No contact requests have been submitted yet.</p>
     @else
