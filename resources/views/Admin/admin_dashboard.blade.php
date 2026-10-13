@@ -24,6 +24,14 @@
             </div>
         </div>
 
+        <div class="stat-card">
+            <div class="stat-icon">🛡️</div>
+            <div class="stat-content">
+                <h3>Total Admins</h3>
+                <p class="stat-number">{{ $totalAdmins ?? 0 }}</p>
+            </div>
+        </div>
+
         
 
         <div class="stat-card">
@@ -149,11 +157,11 @@ const overviewCtx = document.getElementById('overviewChart').getContext('2d');
 new Chart(overviewCtx, {
     type: 'bar',
     data: {
-        labels: ['Users', 'Food Items', 'Expiring Soon', 'Headers'],
+        labels: ['Users', 'Admins', 'Food Items', 'Expiring Soon', 'Headers'],
         datasets: [{
             label: 'Count',
-            data: [{{ $totalUsers ?? 0 }}, {{ $totalFoods ?? 0 }}, {{ $totalExpiringSoon ?? 0 }}, {{ $totalHeaders ?? 0 }}],
-            backgroundColor: ['#3b82f6', '#8b5cf6', '#f59e0b', '#06b6d4'],
+            data: [{{ $totalUsers ?? 0 }}, {{ $totalAdmins ?? 0 }}, {{ $totalFoods ?? 0 }}, {{ $totalExpiringSoon ?? 0 }}, {{ $totalHeaders ?? 0 }}],
+            backgroundColor: ['#3b82f6', '#0f766e', '#8b5cf6', '#f59e0b', '#06b6d4'],
         }]
     },
     options: {
