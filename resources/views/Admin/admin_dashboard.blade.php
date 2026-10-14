@@ -98,7 +98,7 @@
                     <div class="expiring-item">
                         <div>
                             <strong>{{ $food->foodname_sfwr }}</strong>
-                            <p>{{ $food->fooddescription_sfwr ?? 'No description available.' }}</p>
+                            <!-- <p>{{ $food->fooddescription_sfwr ?? 'No description available.' }}</p> -->
                         </div>
                         <div class="expiring-meta">
                             <span>Expiry: {{ \Carbon\Carbon::parse($food->expiry_date_sfwr)->format('M d, Y') }}</span>
