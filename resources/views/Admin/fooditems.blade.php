@@ -91,6 +91,35 @@
             cursor: pointer;
         }
 
+        /* Keep the add/edit dialogs over the viewport even if the Vite CSS is stale. */
+        .modal {
+            display: none !important;
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 10000 !important;
+            align-items: center !important;
+            justify-content: center !important;
+            overflow-y: auto;
+            padding: 24px;
+            background: rgba(15, 23, 42, 0.62);
+            backdrop-filter: blur(3px);
+        }
+
+        .modal.active {
+            display: flex !important;
+        }
+
+        .modal .modal-content {
+            width: min(100%, 560px);
+            max-height: calc(100vh - 48px);
+            overflow-y: auto;
+            margin: auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.3);
+        }
+
         button:disabled {
         opacity: 0.5;
         cursor: not-allowed;
@@ -157,6 +186,20 @@
             Expired foods <span>{{ $foodCounts['expired'] ?? 0 }}</span>
         </a>
     </nav>
+
+    @if(session('success'))
+        <div class="alert alert-success" role="status">{{ session('success') }}</div>
+    @endif
+    @if($errors->any())
+        <div class="alert alert-error" role="alert">
+            <strong>Please correct the following:</strong>
+            <ul style="margin: 8px 0 0; padding-left: 22px;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     @if(isset($foodItems) && count($foodItems) > 0)
 
@@ -229,29 +272,30 @@
         </div>
         <form class="modal-form" id="addFoodForm" action="{{ route('admin.food.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" name="form_type" value="add">
             <!-- <input type="text" name="name" placeholder="Food Item Name" required>
             <input type="date" name="expiry_date" required>
             <input type="file" name="image" accept="image/*"> -->
 
-            <input type="text" name="foodname_sfwr" placeholder="Food Name">
+            <input type="text" name="foodname_sfwr" placeholder="Food Name" value="{{ old('foodname_sfwr') }}" required>
 
-            <input type="text" name="foodcategory_sfwr" placeholder="Category">
+            <input type="text" name="foodcategory_sfwr" placeholder="Category" value="{{ old('foodcategory_sfwr') }}" required>
             <h4>Manufacturing Date</h4>
-            <input type="date" name="manufacturing_date_sfwr" placeholder="Manufacturing Date">
+            <input type="date" name="manufacturing_date_sfwr" placeholder="Manufacturing Date" value="{{ old('manufacturing_date_sfwr') }}" required>
             <h4>Expired Date</h4>
-            <input type="date" name="expiry_date_sfwr" placeholder="Expiry Date">
+            <input type="date" name="expiry_date_sfwr" placeholder="Expiry Date" value="{{ old('expiry_date_sfwr') }}" required>
 
-            <input type="number" name="foodquantity_sfwr" placeholder="Quantity">
+            <input type="number" name="foodquantity_sfwr" placeholder="Quantity" value="{{ old('foodquantity_sfwr') }}" min="1" required>
 
-            <input type="number" name="calories_sfwr" placeholder="Calories">
+            <input type="number" name="calories_sfwr" placeholder="Calories" value="{{ old('calories_sfwr') }}" min="0" required>
 
-            <textarea name="fooddescription_sfwr" placeholder="Food Description"></textarea>
+            <textarea name="fooddescription_sfwr" placeholder="Food Description">{{ old('fooddescription_sfwr') }}</textarea>
 
-            <input type="text" name="contact_sfwr" placeholder="Contact Number">
+            <input type="text" name="contact_sfwr" placeholder="Contact Number" value="{{ old('contact_sfwr') }}" required>
 
-            <input type="text" name="pickup_location_sfwr" placeholder="Location">
+            <input type="text" name="pickup_location_sfwr" placeholder="Location" value="{{ old('pickup_location_sfwr') }}" required>
             <h4>Available Till</h4>
-            <input type="datetime-local" name="available_till_sfwr" placeholder="Available Till">
+            <input type="datetime-local" name="available_till_sfwr" placeholder="Available Till" value="{{ old('available_till_sfwr') }}" required>
 
             <input type="file" name="image">
 
@@ -273,28 +317,30 @@
         <form class="modal-form" id="editFoodForm" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <input type="hidden" name="form_type" value="edit">
+            <input type="hidden" name="food_id">
             <!-- <input type="text" name="name" id="editFoodName" placeholder="Food Item Name" required>
             <input type="date" name="expiry_date" id="editFoodExpiry" required>
             <input type="file" name="image" accept="image/*"> -->
-            <input type="text" name="foodname_sfwr" placeholder="Food Name">
+            <input type="text" name="foodname_sfwr" placeholder="Food Name" required>
 
-            <input type="text" name="foodcategory_sfwr" placeholder="Category">
+            <input type="text" name="foodcategory_sfwr" placeholder="Category" required>
 
-            <input type="date" name="manufacturing_date_sfwr">
+            <input type="date" name="manufacturing_date_sfwr" required>
 
-            <input type="date" name="expiry_date_sfwr">
+            <input type="date" name="expiry_date_sfwr" required>
 
-            <input type="number" name="foodquantity_sfwr">
+            <input type="number" name="foodquantity_sfwr" min="1" required>
 
-            <input type="number" name="calories_sfwr">
+            <input type="number" name="calories_sfwr" min="0" required>
 
             <textarea name="fooddescription_sfwr"></textarea>
 
-            <input type="text" name="contact_sfwr">
+            <input type="text" name="contact_sfwr" required>
 
-            <input type="text" name="pickup_location_sfwr">
+            <input type="text" name="pickup_location_sfwr" required>
 
-            <input type="datetime-local" name="available_till_sfwr">
+            <input type="datetime-local" name="available_till_sfwr" required>
 
             <input type="file" name="image">
             
@@ -310,31 +356,7 @@
 <script>
 
 let addForm = document.getElementById("addFoodForm");
-let addBtn = document.getElementById("addBtn");
-
 let editForm = document.getElementById("editFoodForm");
-
-/* -----------------------------
-   ADD FORM VALIDATION (STABLE)
-------------------------------*/
-
-function validateAdd() {
-    let inputs = addForm.querySelectorAll("input:not([type=file]), textarea");
-
-    let allFilled = true;
-
-    inputs.forEach(i => {
-        if (i.value.trim() === "") {
-            allFilled = false;
-        }
-    });
-
-    addBtn.disabled = !allFilled;
-}
-
-addForm.querySelectorAll("input, textarea").forEach(i => {
-    i.addEventListener("input", validateAdd);
-});
 
 /* -----------------------------
    OPEN / CLOSE ADD MODAL
@@ -347,7 +369,6 @@ function openAddFoodModal(){
 function closeAddFoodModal(){
     document.getElementById('addFoodModal').classList.remove('active');
     addForm.reset();
-    addBtn.disabled = true;
 }
 
 /* -----------------------------
@@ -386,11 +407,12 @@ function openEditFoodModal(item){
     editForm.reset();
 
     editForm.action = `/admin/food/update/${item.id_food_sfwr}`;
+    editForm.elements.namedItem('food_id').value = item.id_food_sfwr;
 
     editForm.querySelector('[name="foodname_sfwr"]').value          = item.foodname_sfwr ?? '';
     editForm.querySelector('[name="foodcategory_sfwr"]').value      = item.foodcategory_sfwr ?? '';
-    editForm.querySelector('[name="manufacturing_date_sfwr"]').value = item.manufacturing_date_sfwr ?? '';
-    editForm.querySelector('[name="expiry_date_sfwr"]').value       = item.expiry_date_sfwr ?? '';
+    editForm.querySelector('[name="manufacturing_date_sfwr"]').value = String(item.manufacturing_date_sfwr ?? '').slice(0, 10);
+    editForm.querySelector('[name="expiry_date_sfwr"]').value       = String(item.expiry_date_sfwr ?? '').slice(0, 10);
     editForm.querySelector('[name="foodquantity_sfwr"]').value      = item.foodquantity_sfwr ?? '';
     editForm.querySelector('[name="calories_sfwr"]').value          = item.calories_sfwr ?? '';
     editForm.querySelector('[name="fooddescription_sfwr"]').value   = item.fooddescription_sfwr ?? '';
@@ -399,7 +421,7 @@ function openEditFoodModal(item){
 
     if(item.available_till_sfwr){
         editForm.querySelector('[name="available_till_sfwr"]').value =
-            item.available_till_sfwr.replace(' ', 'T');
+            String(item.available_till_sfwr).replace(' ', 'T').slice(0, 16);
     }
 }
 
@@ -448,11 +470,23 @@ window.addEventListener('click', function(event) {
     if (event.target === editModal) closeEditFoodModal();
 });
 
-/* -----------------------------
-   INITIAL STATE
-------------------------------*/
-
-validateAdd();
+@if($errors->any() && old('form_type') === 'add')
+openAddFoodModal();
+@elseif($errors->any() && old('form_type') === 'edit')
+openEditFoodModal({
+    id_food_sfwr: @json(old('food_id')),
+    foodname_sfwr: @json(old('foodname_sfwr')),
+    foodcategory_sfwr: @json(old('foodcategory_sfwr')),
+    manufacturing_date_sfwr: @json(old('manufacturing_date_sfwr')),
+    expiry_date_sfwr: @json(old('expiry_date_sfwr')),
+    foodquantity_sfwr: @json(old('foodquantity_sfwr')),
+    calories_sfwr: @json(old('calories_sfwr')),
+    fooddescription_sfwr: @json(old('fooddescription_sfwr')),
+    contact_sfwr: @json(old('contact_sfwr')),
+    pickup_location_sfwr: @json(old('pickup_location_sfwr')),
+    available_till_sfwr: @json(old('available_till_sfwr'))
+});
+@endif
 
 </script>
 
