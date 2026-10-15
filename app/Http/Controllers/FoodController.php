@@ -36,11 +36,18 @@ class FoodController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'foodname_sfwr' => 'required|string|max:255',
             'foodcategory_sfwr' => 'required|string|max:255',
+            'manufacturing_date_sfwr' => 'required|date',
+            'expiry_date_sfwr' => 'required|date|after_or_equal:manufacturing_date_sfwr',
             'foodquantity_sfwr' => 'required|integer|min:1',
+            'calories_sfwr' => 'required|integer|min:0',
+            'fooddescription_sfwr' => 'nullable|string',
+            'contact_sfwr' => 'required|string|max:255',
+            'pickup_location_sfwr' => 'required|string|max:255',
             'available_till_sfwr' => 'required|date|after:now',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $imagePath = null;
@@ -50,16 +57,8 @@ class FoodController extends Controller
         }
 
         FoodItemSfwr::create([
-            'foodname_sfwr' => $request->foodname_sfwr,
-            'foodcategory_sfwr' => $request->foodcategory_sfwr,
-            'manufacturing_date_sfwr' => $request->manufacturing_date_sfwr,
-            'expiry_date_sfwr' => $request->expiry_date_sfwr,
-            'foodquantity_sfwr' => $request->foodquantity_sfwr,
-            'calories_sfwr' => $request->calories_sfwr,
-            'fooddescription_sfwr' => $request->fooddescription_sfwr,
-            'contact_sfwr' => $request->contact_sfwr,
-            'pickup_location_sfwr' => $request->pickup_location_sfwr,
-            'available_till_sfwr' => date('Y-m-d H:i:s', strtotime($request->available_till_sfwr)),
+            ...$validated,
+            'available_till_sfwr' => date('Y-m-d H:i:s', strtotime($validated['available_till_sfwr'])),
             'foodimage_sfwr' => $imagePath,
             'id_user_sfwr' => auth()->id(),
         ]);
@@ -70,23 +69,25 @@ class FoodController extends Controller
     public function update(Request $request, $id)
     {
         $food = FoodItemSfwr::findOrFail($id);
+        $validated = $request->validate([
+            'foodname_sfwr' => 'required|string|max:255',
+            'foodcategory_sfwr' => 'required|string|max:255',
+            'manufacturing_date_sfwr' => 'required|date',
+            'expiry_date_sfwr' => 'required|date|after_or_equal:manufacturing_date_sfwr',
+            'foodquantity_sfwr' => 'required|integer|min:1',
+            'calories_sfwr' => 'required|integer|min:0',
+            'fooddescription_sfwr' => 'nullable|string',
+            'contact_sfwr' => 'required|string|max:255',
+            'pickup_location_sfwr' => 'required|string|max:255',
+            'available_till_sfwr' => 'required|date|after:now',
+            'image' => 'nullable|image|max:2048',
+        ]);
 
         if ($request->hasFile('image')) {
-            $food->foodimage_sfwr = $request->file('image')->store('foods', 'public');
+            $validated['foodimage_sfwr'] = $request->file('image')->store('foods', 'public');
         }
 
-        $food->update([
-            'foodname_sfwr' => $request->foodname_sfwr,
-            'foodcategory_sfwr' => $request->foodcategory_sfwr,
-            'manufacturing_date_sfwr' => $request->manufacturing_date_sfwr,
-            'expiry_date_sfwr' => $request->expiry_date_sfwr,
-            'foodquantity_sfwr' => $request->foodquantity_sfwr,
-            'calories_sfwr' => $request->calories_sfwr,
-            'fooddescription_sfwr' => $request->fooddescription_sfwr,
-            'contact_sfwr' => $request->contact_sfwr,
-            'pickup_location_sfwr' => $request->pickup_location_sfwr,
-            'available_till_sfwr' => $request->available_till_sfwr,
-        ]);
+        $food->update($validated);
 
         return back()->with('success', 'Food Updated');
     }
